@@ -1,4 +1,4 @@
-# Arduino Vision EdgeAI Demo (Vision Gauge)
+# Arduino Vision EdgeAI Demo
 
 > 카메라 보드가 **클라우드 없이 직접** 사물을 인식하고, 판단 결과만 무선으로 보내 OLED와 대시보드에 실시간 표시하는 온디바이스 비전 AI 프로젝트.
 

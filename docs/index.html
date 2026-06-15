@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision Gauge — Edge AI 카메라 프로젝트 개요</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#141b24; --panel2:#1a2330;
+    --ink:#e6edf3; --dim:#8b98a8; --line:#243140;
+    --teal:#22d3c5; --teal-dim:#0e7a73;
+    --amber:#f4b740; --violet:#a78bfa; --rose:#fb7185;
+    --green:#4ade80;
+    --mono:'SF Mono','Consolas','Noto Sans Mono CJK KR',monospace;
+    --sans:'Pretendard','Noto Sans CJK KR','Apple SD Gothic Neo',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(34,211,197,.06), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(167,139,250,.05), transparent 40%);}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+
+  /* ===== HERO ===== */
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--teal);margin-bottom:18px;
+    display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--teal)}
+  h1{font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.1;
+    letter-spacing:-.02em;margin-bottom:8px}
+  h1 .accent{color:var(--teal)}
+  .tagline{font-size:clamp(16px,2.2vw,21px);color:var(--dim);font-weight:400;
+    max-width:680px;margin-top:16px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 13px;border-radius:999px;
+    border:1px solid var(--line);color:var(--dim);background:var(--panel)}
+  .chip.on{border-color:var(--teal-dim);color:var(--teal)}
+
+  /* ===== SECTION ===== */
+  section{padding:48px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:600}
+  h2{font-size:24px;font-weight:700;letter-spacing:-.01em}
+  .sec-sub{color:var(--dim);font-size:15px;margin-top:-16px;margin-bottom:26px}
+
+  /* ===== 요약 카드 ===== */
+  .summary{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:28px 30px;font-size:16px;line-height:1.8}
+  .summary strong{color:var(--teal);font-weight:600}
+  .summary .lead{font-size:18px;color:var(--ink);margin-bottom:14px}
+
+  /* ===== 흐름도 (시그니처) ===== */
+  .flow{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:34px 24px;overflow-x:auto}
+  .pipe{display:flex;align-items:stretch;gap:0;min-width:760px}
+  .node{flex:1;background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;padding:16px 14px;position:relative;text-align:center}
+  .node .ic{font-size:24px;margin-bottom:8px;line-height:1}
+  .node .nt{font-weight:700;font-size:14px;margin-bottom:5px}
+  .node .nd{font-size:11.5px;color:var(--dim);line-height:1.45}
+  .node .tag{font-family:var(--mono);font-size:10px;color:var(--teal);
+    margin-top:8px;display:block;letter-spacing:.04em}
+  .arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:0 6px;color:var(--teal);min-width:54px}
+  .arrow .lbl{font-family:var(--mono);font-size:9.5px;color:var(--dim);
+    margin-bottom:3px;white-space:nowrap}
+  .arrow .ln{font-size:18px;line-height:1}
+  .n1{border-top:2px solid var(--teal)}
+  .n2{border-top:2px solid var(--amber)}
+  .n3{border-top:2px solid var(--violet)}
+  .n4{border-top:2px solid var(--rose)}
+  .n5{border-top:2px solid var(--green)}
+
+  /* ===== 2단 그리드 ===== */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}.pipe{min-width:680px}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px}
+  .card h3{font-size:15px;font-weight:700;margin-bottom:16px;
+    display:flex;align-items:center;gap:9px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%}
+  .dot.hw{background:var(--amber)} .dot.sw{background:var(--violet)}
+  ul.clean{list-style:none}
+  ul.clean li{padding:7px 0;border-bottom:1px solid var(--line);
+    font-size:14px;display:flex;justify-content:space-between;gap:12px}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean .k{color:var(--ink);font-weight:500}
+  ul.clean .v{color:var(--dim);font-family:var(--mono);font-size:12px;
+    text-align:right;flex-shrink:0}
+
+  /* ===== 기술스택 ===== */
+  .stack{display:flex;flex-wrap:wrap;gap:10px}
+  .tech{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:11px 15px;font-size:13px;display:flex;align-items:center;gap:8px}
+  .tech .b{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:5px;
+    background:var(--panel2);color:var(--teal);border:1px solid var(--teal-dim)}
+
+  /* ===== 디렉터리 ===== */
+  .tree{background:#0a0e14;border:1px solid var(--line);border-radius:12px;
+    padding:22px 24px;font-family:var(--mono);font-size:13px;line-height:1.9;
+    color:var(--dim);overflow-x:auto;white-space:pre}
+  .tree .d{color:var(--teal)} .tree .f{color:var(--ink)}
+  .tree .c{color:#5a6b7d}
+
+  footer{padding:36px 0 60px;color:var(--dim);font-size:13px;text-align:center}
+  footer code{font-family:var(--mono);color:var(--teal);background:var(--panel);
+    padding:2px 7px;border-radius:5px}
+  a{color:var(--teal);text-decoration:none}
+  a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Edge AI · On-Device Vision</div>
+    <h1>Vision Gauge<br><span class="accent">엣지 AI 카메라</span> 데모</h1>
+    <p class="tagline">카메라 보드가 <strong>클라우드 없이 직접</strong> 사물을 인식하고, 판단 결과만 무선으로 보내 OLED와 대시보드에 실시간 표시하는 온디바이스 비전 AI 프로젝트.</p>
+    <div class="meta-row">
+      <span class="chip on">Nicla Vision</span>
+      <span class="chip on">Edge Impulse</span>
+      <span class="chip on">BLE</span>
+      <span class="chip on">ESP32 · OLED</span>
+      <span class="chip on">Streamlit</span>
+      <span class="chip">고등학교 SW·AI 융합수업</span>
+    </div>
+  </div>
+</header>
+
+<!-- 1. 프로젝트 요약 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2>프로젝트 요약</h2></div>
+    <div class="summary">
+      <p class="lead">"AI가 사물을 알아본다"를 <strong>직접 학습시키고, 보드에 올리고, 눈으로 확인</strong>하는 프로젝트입니다.</p>
+      <p>학생이 카메라로 사물 이미지를 모아 <strong>Edge Impulse</strong>에서 분류 모델을 학습하고, 이를 <strong>Nicla Vision</strong> 보드에 직접 탑재합니다. 인터넷 연결 없이 보드 혼자 추론하며(온디바이스 AI), 인식 결과(클래스·확신도)만 <strong>블루투스(BLE)</strong>로 ESP32 제어 노드에 보내 <strong>OLED</strong>에 게이지로 표시합니다. 동시에 USB로 PC에 연결해 <strong>Streamlit 대시보드</strong>에서 카메라가 보는 영상과 인식 결과를 실시간으로 확인합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 프로세스 흐름도 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2>프로세스 흐름도</h2></div>
+    <p class="sec-sub">데이터가 픽셀에서 시작해 판단이 되고, 무선을 거쳐 사람이 보는 화면에 닿기까지</p>
+    <div class="flow">
+      <div class="pipe">
+        <div class="node n1">
+          <div class="ic">📷</div>
+          <div class="nt">데이터 수집</div>
+          <div class="nd">사물별 이미지 촬영·라벨링</div>
+          <span class="tag">Nicla Vision</span>
+        </div>
+        <div class="arrow"><span class="lbl">업로드</span><span class="ln">→</span></div>
+        <div class="node n2">
+          <div class="ic">🧠</div>
+          <div class="nt">모델 학습</div>
+          <div class="nd">이미지 분류 모델 학습·양자화</div>
+          <span class="tag">Edge Impulse</span>
+        </div>
+        <div class="arrow"><span class="lbl">.zip 배포</span><span class="ln">→</span></div>
+        <div class="node n3">
+          <div class="ic">⚡</div>
+          <div class="nt">온디바이스 추론</div>
+          <div class="nd">보드가 직접 인식 (클라우드 X)</div>
+          <span class="tag">int8 / TFLite</span>
+        </div>
+        <div class="arrow"><span class="lbl">3 byte</span><span class="ln">→</span></div>
+        <div class="node n4">
+          <div class="ic">📡</div>
+          <div class="nt">무선 전송</div>
+          <div class="nd">판단 결과만 BLE 송신</div>
+          <span class="tag">ESP32 · OLED</span>
+        </div>
+        <div class="arrow"><span class="lbl">USB serial</span><span class="ln">→</span></div>
+        <div class="node n5">
+          <div class="ic">📊</div>
+          <div class="nt">시각화</div>
+          <div class="nd">영상·게이지 실시간 표시</div>
+          <span class="tag">Streamlit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 준비물 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2>준비물</h2></div>
+    <div class="grid2">
+      <div class="card">
+        <h3><span class="dot hw"></span>하드웨어 (실물)</h3>
+        <ul class="clean">
+          <li><span class="k">Arduino Nicla Vision</span><span class="v">비전 노드</span></li>
+          <li><span class="k">ESP32 개발보드</span><span class="v">제어 노드</span></li>
+          <li><span class="k">Grove OLED 1.12" V2</span><span class="v">SH1107G · 128×128</span></li>
+          <li><span class="k">USB-C 케이블</span><span class="v">×2</span></li>
+          <li><span class="k">점퍼 와이어 (I2C)</span><span class="v">SDA·SCL·V·G</span></li>
+          <li><span class="k">인식 대상 사물</span><span class="v">예: 아두이노·키보드·마우스</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="dot sw"></span>소프트웨어 · 라이브러리</h3>
+        <ul class="clean">
+          <li><span class="k">Arduino IDE</span><span class="v">2.3+</span></li>
+          <li><span class="k">Edge Impulse</span><span class="v">웹 · 모델 학습</span></li>
+          <li><span class="k">ArduinoBLE</span><span class="v">비전 노드</span></li>
+          <li><span class="k">U8g2 (by oliver)</span><span class="v">OLED 구동</span></li>
+          <li><span class="k">ESP32 보드 패키지</span><span class="v">BLEDevice.h</span></li>
+          <li><span class="k">Python + uv</span><span class="v">streamlit · pyserial · numpy</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 기술 스택 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">04</span><h2>기술 스택</h2></div>
+    <div class="stack">
+      <div class="tech"><span class="b">AI</span>이미지 분류 · TinyML</div>
+      <div class="tech"><span class="b">AI</span>int8 양자화 추론</div>
+      <div class="tech"><span class="b">MCU</span>Nicla Vision (Cortex-M7)</div>
+      <div class="tech"><span class="b">MCU</span>ESP32</div>
+      <div class="tech"><span class="b">통신</span>BLE (GATT)</div>
+      <div class="tech"><span class="b">통신</span>USB Serial</div>
+      <div class="tech"><span class="b">통신</span>I2C (OLED)</div>
+      <div class="tech"><span class="b">SW</span>Streamlit</div>
+      <div class="tech"><span class="b">SW</span>Python · pyserial</div>
+      <div class="tech"><span class="b">SW</span>C++ (Arduino)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 저장소 구조 -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">05</span><h2>저장소 구조</h2></div>
+    <pre class="tree">
+<span class="d">Arduino_Vision_EdgeAI_Demo/</span>
+├─ <span class="d">firmware/</span>            <span class="c"># 보드 펌웨어 (.ino)</span>
+│  ├─ <span class="f">vision_node_step1_test.ino</span>  <span class="c"># 카메라·추론 확인</span>
+│  ├─ <span class="f">vision_node_step2_usb.ino</span>   <span class="c"># USB 영상·결과 송신</span>
+│  ├─ <span class="f">vision_node_step3_ble.ino</span>   <span class="c"># BLE 결과 송신</span>
+│  └─ <span class="f">control_node_oled.ino</span>       <span class="c"># ESP32 OLED 표시</span>
+├─ <span class="d">dashboard/</span>           <span class="c"># PC 대시보드</span>
+│  ├─ <span class="f">monitor.py</span>               <span class="c"># Streamlit 앱</span>
+│  └─ <span class="f">대시보드_실행.bat</span>          <span class="c"># 더블클릭 실행</span>
+├─ <span class="d">manuals/</span>             <span class="c"># 학생·교사 매뉴얼 (PDF)</span>
+├─ <span class="d">docs/</span>                <span class="c"># 이 개요 문서</span>
+├─ <span class="f">README.md</span>
+└─ <span class="f">.gitignore</span>
+    </pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Arduino_Vision_EdgeAI_Demo · physics-jh</p>
+    <p style="margin-top:8px">실행: <code>uv run streamlit run monitor.py</code> &nbsp;·&nbsp; 상세는 <code>manuals/</code> 참조</p>
+  </div>
+</footer>
+
+</body>
+</html>

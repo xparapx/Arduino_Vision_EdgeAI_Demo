@@ -1,0 +1,40 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.uv/
+*.egg-info/
+
+# ===== Streamlit =====
+.streamlit/secrets.toml
+
+# ===== Arduino / 빌드 결과물 =====
+build/
+*.bin
+*.hex
+*.elf
+*.map
+
+# ===== Edge Impulse / 학습 데이터 (대용량 - 100MB 제한 회피) =====
+# 학습 이미지/데이터셋은 Git에 넣지 말고 별도 클라우드 + README 링크 권장
+datasets/
+training_data/
+*.zip
+ei-*-arduino-*.zip
+
+# ===== 영상 / 대용량 미디어 =====
+*.mp4
+*.mov
+*.avi
+
+# ===== OS / 에디터 =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# ===== 로그 =====
+*.log

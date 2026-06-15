@@ -2,7 +2,7 @@
 
 > 카메라 보드가 **클라우드 없이 직접** 사물을 인식, 판단 결과만 무선으로 OLED·대시보드에 실시간 표시하는 온디바이스 비전 AI 프로젝트.
 
-🔗 **프로젝트 개요(웹페이지):** https://xparapx.github.io/Arduino_Vision_EdgeAI_Demo/
+🔗 **프로젝트 개요:** https://xparapx.github.io/Arduino_Vision_EdgeAI_Demo/
 
 `Nicla Vision` · `Edge Impulse` · `BLE` · `ESP32 · OLED` · `Streamlit` · `TinyML` · `SW·AI 융합 교육`
 

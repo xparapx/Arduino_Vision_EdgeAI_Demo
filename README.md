@@ -66,7 +66,6 @@ Arduino_Vision_EdgeAI_Demo/
 ├─ dashboard/           # PC 대시보드
 │  ├─ monitor.py                   # Streamlit 앱
 │  └─ 대시보드_실행.bat             # 더블클릭 실행
-├─ manuals/             # 매뉴얼 (PDF)
 ├─ docs/                # 프로젝트 개요 (index.html)
 ├─ README.md
 └─ .gitignore
